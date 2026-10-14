@@ -1,114 +1,171 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# UPSK Assessment — System Design Fundamentals
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+A backend service built as part of the UPSK **System Design Fundamentals** assessment. The project focuses on application startup, environment configuration, input validation, and health-check verification.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Overview
 
-## Description
+This project uses NestJS and Node.js to demonstrate a simple backend service with:
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- Environment-based port configuration.
+- Validation of the `PORT` environment variable.
+- A health-check endpoint for verifying service availability.
+- A reproducible application startup command.
+- Build and regression verification after fixing a startup issue.
 
-## Project setup
+## Tech Stack
 
-```bash
-$ npm install
+- **Node.js**
+- **TypeScript**
+- **NestJS**
+- **npm**
+- **Git**
+
+## Project Structure
+
+```text
+Upsk_Assessment_Bhavani/
+└── api/
+    ├── src/
+    │   ├── main.ts
+    │   ├── app.module.ts
+    │   └── health.controller.ts
+    ├── .env
+    ├── .env.example
+    ├── package.json
+    └── ...
 ```
 
-## Compile and run the project
+## Prerequisites
 
-```bash
-# development
-$ npm run start
+Install the following before running the service:
 
-# watch mode
-$ npm run start:dev
+- Node.js
+- npm
 
-# production mode
-$ npm run start:prod
+## Setup and Run
+
+1. Open a terminal and navigate to the API directory:
+
+   ```bash
+   cd api
+   ```
+
+2. Install the dependencies:
+
+   ```bash
+   npm install
+   ```
+
+3. Configure the environment variables in `api/.env`.
+
+   Example:
+
+   ```env
+   PORT=3000
+   ```
+
+   Use `.env.example` as a reference for the available configuration variables. Keep actual secrets out of version control.
+
+4. Build the application:
+
+   ```bash
+   npm run build
+   ```
+
+5. Start the application:
+
+   ```bash
+   npm start
+   ```
+
+   The service should start on port `3000` when configured as shown above.
+
+## Health Check
+
+The service exposes the following endpoint:
+
+```http
+GET /health
 ```
 
-## Run tests
+Test it using curl:
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+curl -i http://localhost:3000/health
 ```
 
-## Deployment
+Expected response:
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+```http
+HTTP/1.1 200 OK
+Content-Type: application/json
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+```json
+{
+  "ok": true
+}
+```
 
-## Observability
+A successful response indicates that the application is running and the health endpoint is reachable.
 
-In production applications, observability is essential for understanding how your system behaves, detecting issues early, and maintaining reliable performance.
+## Environment Validation
 
-[NestJS Observe](https://observe.nestjs.com) automatically instruments your NestJS application, giving you deep visibility into your system with minimal setup:
+The application validates `PORT` during startup. It must be an integer between `1` and `65535`.
 
-- **Distributed tracing:** Follow requests across services and understand how they flow through your system.
-- **Waterfall analysis:** Visualize request execution and identify slow operations, bottlenecks, and unexpected delays.
-- **Performance analysis:** Analyze application performance in real time and quickly pinpoint areas that need optimization.
-- **Metrics:** Track key application and infrastructure metrics to understand system health and performance trends.
-- **Logging:** Centralize and correlate logs with traces and other telemetry to make debugging easier.
-- **Error tracking:** Detect errors quickly and investigate their root causes with the surrounding context.
-- **SLA monitoring:** Track service-level objectives and identify when your application is approaching or exceeding defined thresholds.
-- **Alarms and alerts:** Set up alerts for critical errors, performance degradation, SLA violations, and other anomalies so your team can react quickly.
+The application rejects missing, non-numeric, or out-of-range port values instead of starting with invalid configuration.
 
-## Resources
+During the assessment, the application initially failed because the `.env` file was not loaded by the startup command. The startup script was updated to load the environment file before launching NestJS:
 
-Check out a few resources that may come in handy when working with NestJS:
+```json
+"start": "node --env-file=.env ./node_modules/@nestjs/cli/bin/nest.js start"
+```
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Auto-instrument your application with [NestJS Observer](https://observer.nestjs.com). Distributed tracing, metrics, and logging made easy. Error tracking and performance monitoring for your NestJS applications.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+After the change, the application started successfully on port `3000`, and the health endpoint returned HTTP `200 OK`.
 
-## Support
+## Verification Performed
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+- [x] Application build completed successfully.
+- [x] Startup issue related to environment loading was fixed.
+- [x] Application started successfully on port `3000`.
+- [x] `GET /health` returned HTTP `200 OK`.
+- [x] Regression check completed after the fix.
 
-## Stay in touch
+## Design Decision
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+**Architecture: Single application**
 
-## License
+A single-app layout was chosen for this assessment because it keeps the initial service straightforward to develop, run, and verify. Configuration, startup, and application logic remain easy to inspect while the project is small.
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+If the application grows, its responsibilities can be separated into modules or independent services when there is a clear need.
+
+## Current Limitations
+
+This is an assessment project and is not production-ready. The following capabilities remain future work:
+
+- Database persistence.
+- Authentication and authorization.
+- Automated unit and integration tests.
+- Production-grade secret management and deployment configuration.
+- Additional monitoring and operational checks.
+
+## Learning Outcomes
+
+This assessment provided practical experience with:
+
+- Understanding environment-variable loading.
+- Validating configuration before application startup.
+- Diagnosing and fixing a startup failure.
+- Building a NestJS application.
+- Verifying a service through an HTTP health check.
+- Performing a regression check after a code change.
+
+## Author
+
+**Tadimalla Bhavani**
+
+System Design Fundamentals — UPSK Assessment
+
+---
+
+*Note: Do not commit real credentials, API keys, or other secrets in `.env` files. Use environment variables or an appropriate secret-management solution for deployment.*
