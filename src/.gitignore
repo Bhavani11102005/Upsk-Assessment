@@ -1,0 +1,22 @@
+
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+
+# Logs
+npm-debug.log*
+yarn-error.log*
+
+# IDE settings
+.idea/
+.vscode/
+
+# OS files
+.DS_Store
